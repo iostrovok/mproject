@@ -1,0 +1,1 @@
+-define( CONFIG_FILE, "/home/ostrovok/Projects/Proxy/include/config.json" ).

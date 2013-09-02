@@ -1,0 +1,12 @@
+access - log for input messages
+send - log for send messages
+error - error log
+
+
+act - act param for http request
+id - internal uniq request
+st - request start time
+it - open socket time
+ft - request finish time
+br - branch code 
+t1, t2, ... tn - times depend on branch

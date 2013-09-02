@@ -1,0 +1,2 @@
+-module( logger_access ). -author( "ostrovok@gmail.com" ). -behavior( gen_server ).
+-include("logger.hrl").
