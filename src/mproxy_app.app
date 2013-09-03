@@ -7,6 +7,6 @@
         { registered, [ mproxy_app ]},
         { applications, [ kernel, stdlib ]},
         { mod, { mproxy_app, [] }},
-        { included_applications, [ ejson ]}
+        { included_applications, []}
     ]
 }.
