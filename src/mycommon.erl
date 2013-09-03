@@ -1,8 +1,6 @@
 -module( mycommon ).
 -author( "ostrovok@gmail.com" ).
 
--import( ejson ).
-
 -export([ socket_options/1, file_options/1 ]).
 -export([ safe_send/2, json_decode/1, json_val/2, json_prepare/1, number_to_list/1 ]).
 -export([ any_to_int/1, any_to_bin/1, any_to_bool/1, check_int/2, temp_file/0, for_send_prepare/2 ]).
@@ -13,11 +11,9 @@
 -export([ now/0, localtime/0, localtime/1 ]).
 -export([ join_bin/2, join_bin_trunc/2, list_to_bin/1, request_id/0, get_from_list/2, ceiling/1, floor/1 ]).
 
-
 -define( TMP_DIR, "/tmp/var" ). % Директория для временных файлов
 
 -include("records.hrl").
-
 
 request_id() ->
     { MegaSecs, Secs, MicroSecs } = erlang:now(),

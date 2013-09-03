@@ -3,7 +3,6 @@
 -behaviour(application).
 
 -export([ start/2, stop/1 ]).
--import( mc ).
 
 % appmon:start(). application:start(mproxy_app). mc:all_object(clients).
 start( _Type, _StartArgs) -> boss:start_link().

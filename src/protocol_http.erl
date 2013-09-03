@@ -2,7 +2,7 @@
 -author( "ostrovok@gmail.com" ).
 
 -export([ make/1, send_request/2, check_protocol/2, init_protocol/2, execute_protocol/2 ]).
--import( mc ).
+
 -include("records.hrl").
 
 -record( p, {

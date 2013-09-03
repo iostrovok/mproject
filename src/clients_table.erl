@@ -5,7 +5,6 @@
 -export([ sckey/1, srget/1, sinsert/1, sdelete/1, sdelete_object/1 ]).
 
 -include("records.hrl").
--import( mc ).
 
 ckey( Client ) -> ckey( Client#client.type, Client#client.client_id ).
 ckey( Type, ClientId ) -> mc:list_to_term( "client_"++ Type ++"_"++ ClientId ) .

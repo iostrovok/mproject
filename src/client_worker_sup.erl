@@ -6,7 +6,6 @@
 -export([ new_connection/1 ]).
 
 -include("records.hrl").
--import( mc ).
 
 start_link() -> supervisor:start_link({ local, ?MODULE }, ?MODULE, [] ).
 

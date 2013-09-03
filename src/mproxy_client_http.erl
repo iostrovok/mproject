@@ -7,7 +7,6 @@
 -export([ message/1, one_worker/3 ]).
 
 -include("records.hrl").
--import( mc ).
 
 -define( RELOAD_TIME, 180000 ). % By default 10 second
 -record( state, {} ).

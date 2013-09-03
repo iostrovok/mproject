@@ -2,7 +2,6 @@
 -author( "ostrovok@gmail.com" ).
 
 -export([ init_protocol/2, execute_protocol/3, get_timeout/2, get_timeout/3 ]).
--import( mc ).
 -include("records.hrl").
 -define( DEFAULT_TIMEOUT, 500 ).
 

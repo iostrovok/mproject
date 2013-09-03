@@ -1,11 +1,9 @@
-
 -export([ init/1, start_link/0 ]).
 -export([ code_change/3, terminate/2 ]).
 -export([ handle_call/3, handle_cast/2, handle_info/2 ]).
 -export([ log/1, log/2, rlog/1 ]).
 
 -include("records.hrl").
--import( mc ).
 
 -record( file_time, { year, month, day, hour, minute, second }).
 -record( state, { dir, file, file_format_minute, file_format_hour, file_format_day, iodev, file_rotate, file_time, file_format }).

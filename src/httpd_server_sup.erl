@@ -4,8 +4,6 @@
 
 -export([ start_link/0, start_link/1, init/1 ]).
 
--import( httpd_server ).
-
 -include("records.hrl").
 
 -define( MYCONFIG, [

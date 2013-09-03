@@ -3,8 +3,6 @@
 
 -include("records.hrl").
 -include_lib("inets/include/httpd.hrl").
--import( main_act ).
--import( mc ).
 
 -export([ do/1 ]).
 

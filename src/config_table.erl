@@ -5,10 +5,6 @@
 
 -include("records.hrl").
 
-% ets:match( mconfig, { http_viewer, lisent_port, '$1' } ).
-%  ets:match( mconfig, { http_viewer, '_', '_' } ).
-% ets:match( mconfig, { http_viewer, '$1', '$2' } )
-
 type_config( Type ) ->
     lists:map (
         fun([ Key, Value ]) -> { Key, Value } end,

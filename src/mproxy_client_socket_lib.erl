@@ -1,9 +1,6 @@
 -module( mproxy_client_socket_lib ).
 -author( "ostrovok@gmail.com" ).
 
--import( md5 ).
--import( mc ).
-
 -export([ main_work/3 ]).
 
 -include("records.hrl").

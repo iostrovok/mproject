@@ -4,7 +4,6 @@
 
 -export([ start_link/0, start_link/1, init/1, log/1, error/1, error/5, access/5, send/5 ]).
 -include("records.hrl").
--import( mc ).
 
 start_link( _ ) -> start_link().
 start_link() -> supervisor:start_link({local, ?MODULE}, ?MODULE, []).

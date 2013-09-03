@@ -6,7 +6,6 @@
 -export([ start_link/1, start_link/0, stop/0 ]).
 -export([ init/1, terminate/2, handle_call/3, handle_cast/2, handle_info/2, code_change/3 ]).
 
--import(mc).
 -include("records.hrl").
 -record( state, { socket, can_send = false, send_list = [] }).
 -record( message, { data, start_time = 0, id = "", for_log = [] }).

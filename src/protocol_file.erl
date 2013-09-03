@@ -1,8 +1,6 @@
 -module( protocol_file ).
 -author( "ostrovok@gmail.com" ).
 
--import( mc ).
-
 -export([ make/1 ]).
 
 make( JSON ) ->

@@ -5,8 +5,6 @@
 -export([ sub/1, unsub/1, client_list/0, send_req/1 ]).
 
 -include("records.hrl").
--import( mc ).
--import( clients_table ).
 
 -define( RELOAD_TIME, 10000 ). % By default 10 second
 -define( DEFAULT_TIMEOUT, 180000 ). % By default 10 second
