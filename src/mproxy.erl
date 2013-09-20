@@ -11,9 +11,7 @@ start( _Type, _StartArgs) -> boss:start_link().
 stop( _State ) -> ok.
 
 ss() ->
-    ?D( "appmon:start(). mc:all_object(clients). mc:all_object(clients_sender).~nmc:all_object(mconfig).~n"),
-    appmon:start(),
+    ?D( "application:start(mproxy_app).~n"),
     application:start(mproxy_app),
-    mc:all_object(clients),
-    mc:all_object(clients_sender),
+    ?D( "mc:all_object(clients). mc:all_object(clients_sender).~nmc:all_object(mconfig).~n"),
     ok.
