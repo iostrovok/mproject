@@ -6,6 +6,7 @@ use warnings;
 use feature qw(say);
 
 use Getopt::Long;
+use File::Path;
 use File::Temp qw/ tempfile tempdir /;
 use FindBin qw[ $Bin ];
 
@@ -14,12 +15,13 @@ my $REBAR_REPO      = 'https://github.com/basho/rebar.git';
 my $EJSON_REPO      = 'https://github.com/davisp/ejson.git';
 my $MCD_REPO        = 'https://github.com/EchoTeam/mcd.git';
 
-my ( $install_rebar, $install_ejson, $install_memcache, $install_mproject );
+my ( $install_rebar, $install_ejson, $install_memcache, $install_mproject, $log_dir );
 my $result = GetOptions (
 		"r=i"       => \$install_rebar,
 		"ej=i"      => \$install_ejson,
 		"mem=i"     => \$install_memcache,
         "m=i"       => \$install_mproject,
+		"log=s"		=> \$log_dir,
 	);
 
 $install_rebar    = 1 unless defined $install_rebar;
@@ -32,11 +34,16 @@ my $rebar_dir = tempdir( CLEANUP => 1 );
 
 say "\$Bin = $Bin\n";
 my $Dir = "$Bin/mproject";
+my $config_file  = "$Dir/include/mproxy.config";
 my $ebin_dir  = "$Dir/ebin";
 my $src_dir   = "$Dir/src";
 my $ejson_dir = "$Dir/ejson";
 #my $rebar_dir = "$Dir/rebar";
 my $mem_dir   = "$Dir/mcd/";
+$log_dir ||= "$Dir/log/";
+
+my $WorkDir = "/var/log/erlang/";
+my $server_root = "$Dir/web/server_root";
 
 get_rebar() if $install_rebar;
 
@@ -44,23 +51,43 @@ if ( $install_mproject ) {
     get_mproject();
 }
 else {
-    mkdir($Dir);
-    chdir($Dir) or die "Can't create dir $Dir";
+    create_dir $Dir;
+    chdir($Dir) or die "Can't cd $Dir\n";
 }
 
-mkdir($ebin_dir) unless -d $ebin_dir;
+create_dir( $WorkDir );
 
 get_ejson() if $install_ejson;
 get_mcd()   if $install_memcache;
 
-imake("ln -s $src_dir/mproxy_app.app $ebin_dir/mproxy_app.app");
-imake(q[ export ERL_LIBS="$Dir" ]);
-imake(q[ set ERL_LIBS="$Dir" ]);
 
+
+say <<TEXT;
+==================================================
+Start program with command:
+
+export ERL_LIBS="$Dir"
+cd $ebin_dir
+run_erl -daemon $WorkDir $WorkDir "erl -eval 'mproxy:ss()'"
+\"exec escript start.erl\"
+
+
+You can find log into $log_dir
+
+==================================================
+TEXT
 
 exit();
 
 ##############################################
+
+sub create_dir {
+    my $dir = shift;
+
+    return if -d $dir;
+
+    mkpath($dir, { mode => 0777 });
+}
 
 sub get_mproject {
     say "Start install mcd in $Dir";
@@ -70,16 +97,23 @@ sub get_mproject {
     imake("git clone $MPROJECT_REPO");
     chdir($Dir) or die "No download main repo from $MPROJECT_REPO";
 
-    mkdir($ebin_dir) unless -d $ebin_dir;
+    create_dir( $ebin_dir );
+    create_dir( $log_dir );
 
     opendir( DIR, $src_dir) or die "$@";
     while (my $f = readdir DIR ) {
-        say $f;
+        #say $f;
         next unless $f =~ m/\.erl$/;
-        say("erlc -Wall -v +debug_info -o $ebin_dir $src_dir/$f");
+        say "Recompile: src/$f";
+        #say("erlc -Wall -v +debug_info -o $ebin_dir $src_dir/$f");
         imake("erlc -Wall -v +debug_info -o $ebin_dir $src_dir/$f");
     }
     closedir DIR;
+
+    imake("ln -s $src_dir/mproxy_app.app $ebin_dir/mproxy_app.app");
+    die "Can't create symbol link $src_dir/mproxy_app.app -> $ebin_dir/mproxy_app.app\n" unless -f "$ebin_dir/mproxy_app.app";
+
+    update_config();
 
     #imake("cp $rebar_dir/rebar $Dir");
     # finish main repo
@@ -115,8 +149,21 @@ sub get_mcd {
 
 sub imake {
     my $line = shift;
-    say "exe: $line";
+    #say "exe: $line";
     system($line);
+}
+
+sub update_config {
+    open( FILE, $config_file ) or die "$@";
+    my $conf_text = join('', <FILE>);
+    close FILE;
+
+    $conf_text =~ s/<dir>/$Dir/gios;
+    $conf_text =~ s/<logdir>/$log_dir/gios;
+
+    open( FILE, ">$config_file" ) or die "$@";
+    print FILE $conf_text;
+    close FILE;
 }
 
 #erl -pa apps/*/ebin -boot start_sasl -s dummy_proj
